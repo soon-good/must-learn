@@ -3,18 +3,14 @@
 MongoDB에서는 컬렉션의 도큐먼트 간 서로 데이터를 참조하는 방식은 아래의 방식들이 있다. (RDB에서의 JOIN 과 유사한 개념이다.) <br>
 
 - 레퍼런스 방식<br>
-- 확장된 레퍼런스 방식<br>
+- 확장된 레퍼런스 방식(Extended Reference Pattern)<br>
 - 임베디드 방식<br>
 - subset 패턴<br>
 
-<br>
-
-[맛있는 MongoDB](http://www.yes24.com/Product/Goods/85011885) 에서는 레퍼런스 방식, 임베디드 방식을 설명하고 있다. 이중 임베디드 방식을 사용할 경우의 단점에 대해서도 자세히 설명하고 있다. 호기심이 많아서 이것 말고도 다른 패턴이 있나 하고 여기 저기 검색하면서 찾아봤는데, subset 패턴([드림어스컴퍼니 기술블로그 - MongoDB 도입기](https://www.blog-dreamus.com/post/flo-tech-mongodb-%EB%8F%84%EC%9E%85%EA%B8%B0))에 대해서 알게 되었고, 이 외에도 [Extended Reference Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern) 방식에 대해서 알게 되었다.<br>
-
-이 외에도 아래의 패턴들이 있는데, 차차 정리해나갈 예정이다. 오늘은 일단 임베디드 방식과 레퍼런스 방식에 대해서 최대한 간결하고 명료하게 정리해 볼 예정이다. <br>
-
-- [Attribute Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-attribute-pattern)<br>
-- [Outlier Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-outlier-pattern)<br>
+- Attribute Pattern<br>
+  - [www.mongodb.com/blog - Attribute Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-attribute-pattern)<br>
+- Outlier Pattern<br>
+  - [www.mongodb.com/blog - Outlier Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-outlier-pattern)<br>
 
 <br>
 
@@ -27,8 +23,10 @@ MongoDB에서는 컬렉션의 도큐먼트 간 서로 데이터를 참조하는 
 - [임베디드 방식의 장단점](#임베디드-방식의-장단점)<br>
   - [단점](#단점)<br>
   - [장점](#장점)<br>
-- [Extended Reference 패턴 (확장된 레퍼런스 방식)](#Extended-Reference-패턴-확장된-레퍼런스-방식)<br>
+- [Extended Reference 패턴 (확장된 레퍼런스 방식)](#extended-reference-패턴-확장된-레퍼런스-방식)<br>
 - [subset 패턴](#subset-패턴)<br>
+- [Attribute 패턴](#attribute-패턴)<br>
+- [Outlier 패턴](#outlier-패턴)<br>
 
 <br>
 
@@ -37,11 +35,11 @@ MongoDB에서는 컬렉션의 도큐먼트 간 서로 데이터를 참조하는 
 - 주교재<br>
   - [맛있는 MongoDB](http://www.yes24.com/Product/Goods/85011885)<br>
 
-- 참조관계 방식에 관련된 자료<br>
-  - [드림어스컴퍼니 기술블로그 - MongoDB 도입기](https://www.blog-dreamus.com/post/flo-tech-mongodb-%EB%8F%84%EC%9E%85%EA%B8%B0)<br>
-
-- MongoDB 공식 매뉴얼
-  - [(레퍼런스 방식) Building with Patterns : The Extended Reference Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern)<br>
+- MongoDB 공식 매뉴얼<br>
+  - [www.mongodb.com - subset pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-subset-pattern)<br>
+  - [www.mongodb.com/blog - Extended Reference Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern)<br>
+  - [www.mongodb.com/blog - Attribute Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-attribute-pattern)<br>
+  - [www.mongodb.com/blog - Outlier Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-outlier-pattern)<br>
 
 <br>
 
@@ -59,12 +57,11 @@ MongoDB에서는 컬렉션의 도큐먼트 간 서로 데이터를 참조하는 
 
 > 참고) MongoDB 에서는 관계형 DB에서의 각 테이블의 row 와 같은 개념을 **'도큐먼트'** 라고 부른다.<br>
 
-아래와 같이 참조관계에 있는 도큐먼트 들을 배열로 표현해 저장하는 방식을 임베디드 방식의 모델이라고 한다. 이 방식에는 한계점이 있다. MongoDB의 도큐먼트의 크기는 16MB까지가 제한되어 있다. 이 16MB 의 제한이 걸려있는 문제로 인해 배열 사이즈가 무한히 길어질 경우 데이터가 유실될 위험 역시 존재한다. 이런 이유로 **subset** 패턴 등을 적용하는데, 이것은 내일 이후로 정리하게 될 것 같다.
+아래와 같이 참조관계에 있는 도큐먼트 들을 배열로 표현해 저장하는 방식을 임베디드 방식의 모델이라고 한다. 이 방식에는 한계점이 있다. MongoDB의 도큐먼트의 크기는 16MB까지가 제한되어 있다. 이 16MB 의 제한이 걸려있는 문제로 인해 배열 사이즈가 무한히 길어질 경우 데이터가 유실될 위험 역시 존재한다. 이런 경우 **subset** 패턴 등을 적용하기도 한다.<br>
 
-subset pattern 에 대해서는 아래에서 자세히 다루겠지만, 참고할 만한 자료들은 아래와 같다.
+subset pattern 에 대해서는 아래에서 자세히 다루겠지만, 참고할 만한 자료는 아래와 같다.<br>
 
-- [www.mongodb.com - subset pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-subset-pattern)
-- [드림어스컴퍼니 기술블로그 - MongoDB 도입기](https://www.blog-dreamus.com/post/flo-tech-mongodb-%EB%8F%84%EC%9E%85%EA%B8%B0)<br>
+- [www.mongodb.com - subset pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-subset-pattern)<br>
 
 <br>
 
@@ -140,11 +137,7 @@ SELECT ALL 시에 배열 기반으로 이루어져 있는 필드를 그대로 �
 
 배열로 저장할 필드가 적고 조건 조회에 성능이 소모되지 않는다면 임베디드 방식을 고려해보는 것도 좋은 방식이다.<br>
 
-예를 들면 '철수'라는 사용자의 주소가 2개라고 해보자. 하나는 **배송을 위한 실거주지** 이고, 다른 하나는 **등본상의 주소지**이다. 이 경우 조회시마다 주소 테이블을 한번 더 조회해서 연관 키값을 통해 두개의 주소를 불러와야 한다. 만약 이렇게 여러개의 주소지에 대한 요구사항이 제품의 특성에서 고정되어 있는 경우라면, 사용자 테이블의 주소에 배열 형태로 임베디드 방식으로 2개의 주소를 저장해 두어 조회연산을 줄이는 것도 좋은 선택일 것 같다. <br>
-
-이후 주소지가 변경되면, 수정 페이지에서 수정 연산을 할 때 배열 내의 2개의 필드만 수정해주면 된다.<br>
-
-이러한 방식을 subset 패턴이라고 하는데, 이 subset 패턴은 이번 문서의 뒤에서 따로 정리할 예정이다.<br>
+참조를 하지 않고도 필요한 정도의 데이터만을 추려서 배열로 가지고 있으면 유리한 경우가 있다. 예를 들면 Top N 쿼리가 적용된 필드를 미리 도큐먼트 내의 필드 하나에 배열로 가지고 있는 경우를 들 수 있다. 여기에 대해서는 아래에서 [subset 패턴](#subset-패턴) 에 정리해두었다.<br>
 
 <br>
 
@@ -160,12 +153,39 @@ TODO 정리<br>
 
 ## subset 패턴
 
-TODO 정리<br>
+> **참고자료**<br>
+>
+> - [www.mongodb.com - subset pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-subset-pattern)<br>
 
-**참고자료**<br>
+<br>
 
-- [드림어스컴퍼니 기술블로그 - MongoDB 도입기](https://www.blog-dreamus.com/post/flo-tech-mongodb-%EB%8F%84%EC%9E%85%EA%B8%B0)
-- [www.mongodb.com - subset pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-subset-pattern)<br>
+subset 패턴은 개념적으로 정리하는 것보다는 예를 들어서 정리하는 것이 낫겠다는 생각이 들었다. 위의 mongodb 블로그에서는 subset pattern 을 사용하면 좋은 여러가지에 대해서도 이야기해주고 있다. `상품` 컬렉션과 `리뷰` 컬렉션의 관계를 통해 설명하고 있고, 내용이 어렵지 않아 금방 이해가 되었다.(영어를 읽는 것은 조금 힘들었다.)<br>
+
+아래는 내 식대로 생각해본 예제이다. 어떤 개념을 이해할 때에는 예를 들어서 이해하는게 가장 머릿속에 강하게 남는 것 같다.<br>
+
+<br>
+
+**쇼핑몰의 연관검색어 리스트 출력 예**<br>
+
+쇼핑몰의 물건을 MongoDB에 저장하려 한다고 해보자. 이 Product (물건) 컬렉션의 경우 아래와 같이 연관검색어를 임베디드 패턴으로 저장하고 있다고 해보자. 이 Product 는 지금까지 무리 없이 잘 운영되고 있었다. <br>
+
+하지만, 10년이 지는 어느 순간부터 "열라면"이라는 상품(Product)에 대한 연관검색어가 1700만건 이상 생겼다. 도큐먼트 하나의 데이터 크기는 최대 16MB 이하여야 한다. 1700 만건의 데이터가 하나의 도큐먼트에 배열로 쭉 생겼다는 것은 객체 하나당 1Byte라고 짧게 퉁쳐도 16MB를 넘어서게 된다. 물론, 예가 정말 터무니 없이 극단적인 예이긴 하다.<br>
+
+하지만, document 내에 배열이 엄청 길어지면 필요한 것만을 찾아낼 때 로직을 따로 작성해야 하고, 데이터 정합성 관리도 안될것이다. 이런 단점을 보완할 수 있는 패턴 중 하나가 subset 패턴이다.<br>
+
+<br>
+
+![이미지](./img/SUBSET-PATTERN-BEFORE.png)
+
+
+
+쇼핑몰에서는 연관검색어가 100만개라고 해서 모두 보여줄 필요는 없다. 연관검색어 중에서 원하는 기준으로 추려서 5개 정도만 보여주어도 된다. 아래의 경우를 보자.<br>
+
+![이미지](./img/SUBSET-PATTERN-AFTER.png)
+
+Keyword 컬렉션에는 모든 사용자들의 keyword 를 저장하고 있는다. 그리고 Product 내의 `searchKeywords` 프로퍼티에는 가장 인기있는 검색어 3개만 저장하고 있는다. 이 `searchKeywords` 필드에는 저장하는 데이터의 성격은 TopN 쿼리 성격의 데이터이다. 이렇게 임베디드 필드 역시 인덱싱 대상이 되는데, 이렇게 가볍게 관리를 한다면, 재색인 연산을 할때 부하를 줄이기에도 유리할것이다.<br>
+
+Product 컬렉션 내의 `searchKeywords` 는 배치 프로세스를 매주 토요일 오전 4시에 배치 프로세스를 통해 Keywords 컬렉션과 상품카테고리, 조회 수등을 조합하여 업데이트 하는 등 여러가지 작업을 할 수 있지 않을까 싶다. <br>
 
 <br>
 
