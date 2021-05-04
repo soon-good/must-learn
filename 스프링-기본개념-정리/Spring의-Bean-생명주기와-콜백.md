@@ -6,15 +6,15 @@
 
 가급적 요약 형태로 깔끔하게 정리해볼 예정이다.<br>
 
-
+<br>
 
 ## 목차
 
 - [참고자료](#참고자료)<br>
-- [스프링의 Bean 생명주기,콜백](#스프링의-Bean-생명주기-콜백)<br>
+- [스프링의 Bean 생명주기,콜백](#스프링의-bean-생명주기콜백)<br>
 - [InitializingBean, DisposableBean 사용방식](#initializingbean-disposablebean-사용방식)<br>
   - [단점](#단점)<br>
-  - [@Bean(initMethod, destroyMethod) 사용방식](#@bean-initmethod-destroymethod-사용방식)<br>
+  - [@Bean(initMethod, destroyMethod) 사용방식](#beaninitmethod-destroymethod-사용방식)<br>
 - [@PostConstruct, @PreDestroy](#postconstruct-predestroy)<br>
   - [PostConstruct](#postconstruct)<br>
   - [PreDestroy](#predestroy)<br>
@@ -26,11 +26,9 @@
 
 ## 참고자료
 
-- 참고자료 정리 
+- 참고자료 정리 <br>
 
-
-
-
+<br>
 
 ## 스프링의 Bean 생명주기,콜백
 
@@ -44,7 +42,9 @@
 
 ## InitializingBean, DisposableBean 사용방식
 
-InitializingBean, DisposableBean 을 implements 해서 스프링의 내부 실행 컨텍스트가 가로챌 수 있도록 해주는 방식이다. 예제는 아래와 같다. (InitializingBean, DisposableBean 을 사용하는 초기화/종료 방식들은 스프링 초창기에 나온 방식들이다. 현재는 더 나은 방식들이 나와 있는데, 이것에 대해서는 추후 정리 예정)
+InitializingBean, DisposableBean 을 implements 해서 스프링의 내부 실행 컨텍스트가 가로챌 수 있도록 해주는 방식이다. 예제는 아래와 같다. (InitializingBean, DisposableBean 을 사용하는 초기화/종료 방식들은 스프링 초창기에 나온 방식들이다. 현재는 더 나은 방식들이 나와 있는데, 이것에 대해서는 추후 정리 예정)<br>
+
+<br>
 
 ```java
 public class Helloworld implements InitializingBean, DisposableBean {
@@ -121,6 +121,8 @@ public @interface Bean {
 destroyMethod() 는 위에서 보듯이 기본값이 "(inferred)" 로 등록되어 있다. 이 **추론** 기능은 close, shutdown 이라는 이름의 메서드를 자동으로 호출해준다. 이름 그대로 종료 메서드를 **추론** 해서 호출해준다. 따라서 직접 스프링 빈으로 등록하면, 종료메서드는 따로 적어주지 않아도 잘 동작한다.<br>
 
 추론 기능을 사용하지 않도록 하려면 destroyMethod = "" 으로 지정해 Bean을 등록하면 된다.<br>
+
+<br>
 
 **예제)** <br>
 
@@ -246,25 +248,13 @@ public class Helloworld {
 }
 ```
 
-
-
-
+<br>
 
 ## 결론
 
 일반적으로 @PostConstruct, @PreDestroy 애노테이션을 사용하는 것을 권장하는 편이다.<br>
 
 외부라이브러리 내의 특정 객체의 생성/소멸 시점을 후킹해서 해당 시점에 수행할 동작을 지정해야 한다면, @Bean(initMethod, destroyMethod) 를 사용하자. (왜냐하면, 외부라이브러리 내에 우리가 직접 @PostConstruct, @PreDestroy 를 적어줄수는 없기 때문이다.)<br>
-
-
-
-
-
-
-
-
-
-
 
 
 
