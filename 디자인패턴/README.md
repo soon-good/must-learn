@@ -10,13 +10,13 @@
 
 - 빌더패턴<br>
   - [Adopting Builder Patter with Abstract class](https://cindystlai.wordpress.com/2017/04/20/adopting-builder-pattern-with-abstract-class/)<br>
-  - Enum 을 조합하는 것이 아닌 Dto 를 빌드하는 빌더패턴을 구현할 것이기 때문에 이 자료가 가장 도움이 되었다.<br>
+    - Enum 을 조합하는 것이 아닌 Dto 를 빌드하는 빌더패턴을 구현할 것이기 때문에 이 자료가 가장 도움이 되었다.<br>
   - [백기선님의 스터디 자료](https://github.com/keesun/study/blob/master/effective-java/item2.md)를 보면서 아이디어를 얻었고 실제 자료 검색 후 [여기 ->](https://cindystlai.wordpress.com/2017/04/20/adopting-builder-pattern-with-abstract-class/)의 자료가 더 내 예제에 잘 맞는 케이스였던것 같다.<br>
-- [altongmon.tistory.com - T extends 타입, 와일드카드 타입, 제너릭 타입 상속](https://altongmon.tistory.com/241)<br>
-
-- [HttpStatus 상태코드 (SpringFramework)](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java) <br>
-    - enum 기반의 HttpStatus 상태코드를 참고해서, 예제에 필요한 부분들만을 추려내서 구현<br>
-    - 참고 : [github/spring-projects/spring-framework/.../HttpStatus.java](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java)<br>
+  - [altongmon.tistory.com - T extends 타입, 와일드카드 타입, 제너릭 타입 상속](https://altongmon.tistory.com/241)<br>
+  
+  - [HttpStatus 상태코드 (SpringFramework)](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java) <br>
+      - enum 기반의 HttpStatus 상태코드를 참고해서, 예제에 필요한 부분들만을 추려내서 구현<br>
+      - 참고 : [github/spring-projects/spring-framework/.../HttpStatus.java](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java)<br>
 
 <br>
 
