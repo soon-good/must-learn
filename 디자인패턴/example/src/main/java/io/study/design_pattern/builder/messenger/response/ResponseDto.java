@@ -1,4 +1,4 @@
-package io.study.design_pattern.builder;
+package io.study.design_pattern.builder.messenger.response;
 
 import io.study.design_pattern.http.HttpStatus;
 

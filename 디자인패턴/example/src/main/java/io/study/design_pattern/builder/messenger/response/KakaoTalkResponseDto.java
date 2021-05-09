@@ -1,4 +1,4 @@
-package io.study.design_pattern.builder;
+package io.study.design_pattern.builder.messenger.response;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -72,15 +72,16 @@ public class KakaoTalkResponseDto extends ResponseDto{
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("KakaoTalkResponseDto{ ")
-			.append("userProfileDto = " + userProfileDto)
-			.append(", ")
-			.append("receivedTime = " + receivedTime)
-			.append(", ")
-			.append("status = " + getStatus())
-			.append(", ")
-			.append("message = " + getMessage())
-			.append(" } \n");
+		buffer.append("KakaoTalkResponseDto { \n")
+			.append("\tuserProfileDto = " + userProfileDto)
+			.append(", \n")
+			.append("\treceivedTime = " + receivedTime)
+			.append(", \n")
+			.append("\tstatus = " + getStatus())
+			.append(", \n")
+			.append("\tmessage = " + getMessage())
+			.append("\n")
+			.append("} \n");
 
 		return buffer.toString();
 	}

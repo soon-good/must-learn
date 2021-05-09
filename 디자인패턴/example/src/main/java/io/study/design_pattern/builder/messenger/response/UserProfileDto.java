@@ -1,4 +1,4 @@
-package io.study.design_pattern.builder;
+package io.study.design_pattern.builder.messenger.response;
 
 public class UserProfileDto {
 	private String nickName;	// 닉네임
