@@ -10,6 +10,7 @@
         - 백기선님의 스터디 자료를 보면서 아이디어를 얻었고 실제 자료 검색 후 [여기 ->](https://cindystlai.wordpress.com/2017/04/20/adopting-builder-pattern-with-abstract-class/)의 자료가 더 내 예제에 잘 맞는 케이스였던것 같다.<br>
     - [백기선 님의 스터디 리포지터리의 문서](https://github.com/keesun/study/blob/master/effective-java/item2.md)를 참고해서 예제 시나리오를 구상해서 만들었습니다.<br>
         - [여기 ->](https://github.com/keesun/study/blob/master/effective-java/item2.md)<br>
+    - [altongmon.tistory.com - T extends 타입, 와일드카드 타입, 제너릭 타입 상속](https://altongmon.tistory.com/241)
 <br>
 - [HttpStatus 상태코드 (SpringFramework)](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java)<br>
     - enum 기반의 HttpStatus 상태코드를 참고해서, 예제에 필요한 부분들만을 추려내서 구현<br>
