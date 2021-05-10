@@ -7,11 +7,9 @@ public class UserProfileDto {
 	public UserProfileDto(){}
 
 	public static class Builder{
-		private final UserProfileDto actualInstance;
+		private final UserProfileDto actualInstance = new UserProfileDto();
 
-		public Builder(){
-			actualInstance = new UserProfileDto();
-		}
+		public Builder(){}
 
 		public Builder self(){
 			return this;
