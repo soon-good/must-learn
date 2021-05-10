@@ -17,6 +17,17 @@
   - [HttpStatus 상태코드 (SpringFramework)](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java) <br>
       - enum 기반의 HttpStatus 상태코드를 참고해서, 예제에 필요한 부분들만을 추려내서 구현<br>
       - 참고 : [github/spring-projects/spring-framework/.../HttpStatus.java](https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/http/HttpStatus.java)<br>
+- 싱글턴패턴<br>
+  - [JournalDev - Java Singleton Design Pattern](https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples#bill-pugh-singleton)<br>
+    - 가장 유효하게 찾아본 자료이다. 이 자료를 기반으로 정리해볼 예정이다.<br>
+  - [Inner class, static inner class-lazy loading](https://www.programmersought.com/article/35794331711/)<br>
+    - 나는 inner class 가 로딩되는 시점을 약간은 내 마음대로 이해하고 있지 않나? 싶어서 찾아봤던 자료이다.<br>
+    - 도움이 많이 되었다.<br>
+  - [케빈 tv 방송 - 패턴이야기 - 싱글톤 패턴 (1부)](https://www.youtube.com/watch?v=Ba7iYO7_BPc)<br>
+  - [케빈 tv 방송 - 패턴이야기 - 싱글톤 패턴 (2부)](https://www.youtube.com/watch?v=ZrF8r5LUadc)<br>
+    - 순진한 코더 1년차 일때 싱글톤 패턴에 관심을 가지게 해준 방송 ㅋㅋ<br>
+  - [백기선님 effective java](https://github.com/keesun/study/blob/master/effective-java/item3.md)<br>
+  - [yaboong.github.io - thread-safe-singleton-patterns/](https://yaboong.github.io/design-pattern/2018/09/28/thread-safe-singleton-patterns/)<br>
 
 <br>
 
