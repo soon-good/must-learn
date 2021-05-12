@@ -16,10 +16,7 @@ public abstract class ResponseDto {
 		protected abstract O createActualInstance();
 		protected abstract T getActualBuilder();
 
-		protected Builder(){
-//			actualInstance = createActualInstance();
-//			actualClassBuilder = getActualBuilder();
-		}
+		protected Builder(){}
 
 		public T code(int code){
 			actualInstance.setCode(code);
