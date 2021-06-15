@@ -6,6 +6,7 @@
 
 - [Part4 - RabbitMQ Exchanges, routing keys and bindings](https://www.cloudamqp.com/blog/part4-rabbitmq-for-beginners-exchanges-routing-keys-bindings.html)
 - [RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
+- [RabbitMQ Documentation](https://www.rabbitmq.com/documentation.html)
 - [RabbitMQ 삽질](https://shortstories.gitbook.io/studybook/message_queue_c815_b9ac/rabbitmq-c0bd-c9c8)
   - RabbitMQ의 메시지 전송 방식들을 빠르게 파악하는데에 도움이 되었던 자료이다.
 
