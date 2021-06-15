@@ -134,16 +134,19 @@ Exchange 를 사용하지 않고, 생산자와 소비자를 직통으로 큐로 
 
 <br>
 
-- Direct <br>
+- Fanout<br>
+  - 브로드캐스팅 같은 전송방식이다.
+  - Fanout 방식은 Routing Key 가 아무 의미없다. 그냥 퍼블리셔에게서 RabbitMQ내의 Exchange(거래소)에 메시지를 전달 받으면, Fanout 방식의 Exchange(거래소)는 binding 된 모든 큐로 모든 메시지를 쏘아보낸다.<br>
+  - 따라서 fanout 방식은 routingKey가 아무 의미 없다.<br>
+- Direct<br>
+  - 메시지의 라우팅키가 완전히 일치하는 큐에 바인딩되도록 하는 익스체인지이다.
   - Direct 타입의 익스체인지(거래소)에서 메시지는 바인딩 키가 메시지의 라우팅 키에 맞는 큐에 라우팅 된다.<br>
   - 하나의 큐에 하나의 라우팅 키를 기반으로 바인딩하는 방식이다.<br>
   - 또는 하나의 라우팅 키를 여러 큐에 바인딩하는 것 역시 가능하다.<br>
 - Topic<br>
+  - 라우팅 키를 와일드카드 같은 정규표현식으로 여러 조건에 포함되도록 하는 방식인데, 예를 들면 제각각의 라우팅 키를 의미로 구분해서 특정 조건에 맞는 메시지를을 특정 큐에 바인딩되도록 하는 것이 가능한 방식이다.
   - 라우팅 키를 '.'으로 구분해서 하나의 경로처럼 구성할 수 있고, 여러가지 단계로 구성할 수 있다.<br>
   - 이때 디렉터리를 참조할 때처럼 와일드 카드를 사용해 *,# 과 같은 와일드 카드로 특정 조건에 해당하는 큐 들을 지목해서 메시지를 발송하는 것이 가능하다.<br>
-- Fanout<br>
-  - Fanout 방식은 Routing Key 가 아무 의미없다. 그냥 퍼블리셔에게서 RabbitMQ내의 Exchange(거래소)에 메시지를 전달 받으면, Fanout 방식의 Exchange(거래소)는 binding 된 모든 큐로 모든 메시지를 쏘아보낸다.<br>
-  - 따라서 fanout 방식은 routingKey가 아무 의미 없다.<br>
 - Headers<br>
   - 헤더는 라우팅에 메시지 헤더를 사용한다.<br>
 
@@ -165,5 +168,4 @@ Exchange 를 사용하지 않고, 생산자와 소비자를 직통으로 큐로 
 - **Vhost, virtual host:** Provides a way to segregate applications using the same RabbitMQ instance. Different users can have different permissions to different vhost and queues and exchanges can be created, so they only exist in one vhost.
 
 <br>
-
 
