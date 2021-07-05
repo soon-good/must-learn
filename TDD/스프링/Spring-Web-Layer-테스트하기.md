@@ -140,11 +140,9 @@ public class TestingWebApplicationTest {
 
 ### @WebMvcTest
 
-@AutoConfigureMockMvc 는 서버를 구동시는 것은 아니지만, 스프링 애플리케이션의 거의 모든 컨텍스트가 시작된다.<br>
+@AutoConfigureMockMvc 는 서버를 구동시는 것은 아니지만, 스프링 애플리케이션의 거의 모든 컨텍스트가 시작된다. 하지만, web layer 만에 한정해서 테스트의 범위를 줄일 수 있는 경우 역시 있다.<br><br>
 
 @WebMvcTest 어노테이션을 사용하면 테스트 범위를 웹 레이어에 한정하도록 축소해서 테스트할 수 있다.<br>
-
-하지만, web layer 만에 한정해서 테스트의 범위를 줄일 수 있다.<br>
 
 또는 특정 컨트롤러에 한정해서만 @WebMvcTest를 사용할 수 있다. (ex. @WebMvcTest(HomeController.class) )<br>
 
