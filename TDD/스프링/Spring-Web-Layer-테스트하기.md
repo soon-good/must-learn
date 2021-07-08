@@ -8,6 +8,11 @@
 
 - Testing the Web Layer
   - [https://spring.io/guides/gs/testing-web/](https://spring.io/guides/gs/testing-web/)
+- [[docs.spring.io] MockMvcBuilders](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/setup/MockMvcBuilders.html)
+- [[docs.spring.io] AbstractMockMvcBuilder](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/setup/AbstractMockMvcBuilder.html#build--)
+- [[docs.spring.io] StandaloneMockMvcBuilder](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/setup/StandaloneMockMvcBuilder.html)
+- [[docs.spring.io] MockMvc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/MockMvc.html)
+- [[docs.spring.io] ResultActions](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/ResultActions.html)
 
 <br>
 
@@ -163,5 +168,78 @@ public class WebLayerTest {
 
 컨트롤러 계층에 다른 컴포넌트를 선언해두어서 의존성이 있을 경우 @MockBean 어노테이션을 사용해서 GreetingService 타입의 mock 객체를 생성하고 주입할 수 있다. 이건 Mockito 를 이용하여 사용가능하다.<br>
 
-## MockMvcTest
+## MockMvc 테스트
+
+MVC 계층에서 사용되는 객체를 Mocking해서 테스트하는 방식이다. `MockMvc` 객체는 스프링 MVC 계층을 Mocking 할 수 있도록 스프링에서 제공해주는 클래스이다. 그리고 이 `MockMvc` 객체는 `perform()` , `andDo()` , `andExpect()` 의 동작을 수행할수 있도록 메서드를 제공해주고 있다. 그리고 이 메서드 각각이 `ResultHandlers` , `ResultMatcher` 인스턴스 각각의 동작을 받아 서로 다른 동작을 할 수 있도록 하는 역할을 수행한다.<br>
+
+`MockMvcBuilders` , `andDo()` , `andExpect()` , `ResultHandlers` , `ResultMatcher` 를 사용하는 실제 예를 보면, 잘 짜여진 API 인것 같다는 생각이 든다.<br>
+
+MockMvc 객체를 테스트할 때 일반적으로 자주 거치는 순서/단계는 아래와 같다.
+
+- MockMvc 객체 생성하기
+  - MockMvcBuilders 를 이용해 생성한다.
+- MockMvc 객체로 perform 
+- MockMvc 객체로 perform 에 대해 expect 선언문 작성하기
+  - perform 에 대해 기대되는 결괏값은 여러 가지가 있을 수 있는데, 이것에 대해 정의하는 과정이다.
+- perform 과 expect 이전에 해야 하는 동작을 andDo 로 선언하기
+
+<br>
+
+### MockMvc 객체 생성하기
+
+> 참고 : 
+>
+> - [[docs.spring.io] MockMvcBuilders](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/setup/MockMvcBuilders.html)
+> - [[docs.spring.io] AbstractMockMvcBuilder](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/setup/AbstractMockMvcBuilder.html#build--)
+
+<br>
+
+MockMvc 객체를 생성할 때, 보통 MockMvcBuilders 를 이용해 생성한다. MockMvcBuilders 클래스를 이용해 MockMvc 객체를 만들때 Mocking 된 웹 애플리케이션의 동작 범위를 `@Controller` 타입의 인스턴스 들을 직접 지정해서 해당 범위에서만 테스트할 지, 또는 완전하게 갖춰진 `WebApplicationContext` 를 사용해서  전체 웹 애플리케이션 범위에서 테스트할 지를 선택할 수 있다.<br>
+
+- standaloneSetup(Object... controllers)
+  - 테스트하려는 `@Controller` 타입의 인스턴스들을 standaloneSetup 에 등록할 수 있다.
+- webAppContextSetup(WebApplicationContext context)
+  - 테스트할 수 있는 범위를 WebApplicationContext 전역으로 지정한다. 
+  - 웹 계층에 등록된 모든 컴포넌트들에 MockMvc로 접근할 수 있게 되는데, 이 때 접근하는 객체는 Mocking 된 객체이다.
+- build()
+  - AbstractMockMvcBuilder 클래스의 메서드이다.
+  - MockMvc 객체를 생성한다. (빌더패턴)
+
+<br>
+
+> 참고) MockMvcBuilders 클래스 만을 이용해 MockMvc 객체를 생성할 수 있는 것은 아니다. 사용자가 직접 MockMvcBuilders를 커스터마이징한 클래스로 MockMvc 객체를 생성하는 것 역시 가능하다.
+
+```java
+@WebMvcTest // SpringBootTest 역시 가능하다.
+public class EmployeeControllerTest {
+  @Autowired
+  private EmployeeController controller;
+  
+  private MockMvc mockMvc;
+  
+  @BeforeEach
+  void setup(){
+    mockMvc = MockMvcBuilders
+        // MockMvc 인스턴스는 보통 MockMvcBuilders 클래스의 standaloneSetup(Controller) 메서드를 사용한다.
+        // 인자값으로 사용되는 controller 는 Spring 컨테이너 내에 존재하는 Controller 인스턴스이다.
+        .standaloneSetup(controller)
+        // MockMvc 객체를 최종적으로 반환해주는 것은 build() 메서드이다.
+        .build();
+  }
+}
+```
+
+
+
+### 테스트 실행하기
+
+> 참고)
+>
+> - [[docs.spring.io] MockMvc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/MockMvc.html)
+> - [[docs.spring.io] ResultActions](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/ResultActions.html)
+> - perform() : ResultActions -> andDo(ResultHandler), andExpect(ResultMatcher), andReturn()
+
+<br>
+
+
 
