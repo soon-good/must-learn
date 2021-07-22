@@ -4,6 +4,8 @@
 
 오늘 정리하는 내용은 [예전에 정리했던 내용](https://github.com/gosgjung/modern-java-in-action/blob/develop/study/summary/ch11_optional/11.3-Optional-%EA%B8%B0%EB%B3%B8%EC%98%88%EC%A0%9C.md)을 최대한 개인적인 시각으로 요약하고 더 줄여본 내용이다. 아무것도 모를때 정리했던 내용들은 다소 사족이 많았다는 느낌이 든다. 테스트 코드도 일단은 커밋해두었는데, 적당한 리포지터리를 찾아서 새로 기록해둘 예정이다~!!<br>
 
+정리하다보니 지금까지 알던 것 외에도 의외로 잘 모르고 있던 개념도 있었고 자주 사용해보지 않은 메서드도 있었는데, 모두 나중에 유용하게 쓸수 있을것 같다는 생각이 들었다.<br>
+
 <br>
 
 ## 참고자료
@@ -235,6 +237,15 @@ public void Optional_flatMap_테스트(){
 
 <br>
 
+### 출력결과
+
+```plain
+Optional.map >> result1 = Optional[태양]
+Optional.flatMap >> result2 = Optional[111.0]
+```
+
+<br>
+
 ## Optional 의 주요 메서드 요약
 
 - empty
@@ -302,10 +313,38 @@ Optional 로 감싸져 있는 객체는 프로그램 내에서 사용할 때는 
 
 Optional의 get() 메서드는  Optional<T>....get()을 수행할 때 
 
-- 해당 옵셔널 객체가 Optional.empty가 아닐 경우는 
+- 해당 옵셔널 객체가 Optional.empty가 아닐 경우 
   - get() 을 호출할때 T에 해당하는 값을 반환한다.
-- 해당 옵셔널 객체가  Optional.empty일 경우에는
+- 해당 옵셔널 객체가  Optional.empty일 경우
   - Optional.empty 객체에 대해 get() 함수를 호출하는 것이기 때문에 `NoSuchElementException`을 발생시킨다.
+
+<br>
+
+```java
+@Test
+public void Optional_get메서드_테스트(){
+  String test = "abc";
+  String s = Optional.ofNullable(test).get();
+  System.out.println("s = " + s);
+
+  test = null;
+  Optional<String> optTest1 = Optional.ofNullable(test);
+  System.out.println("optTest1 = " + optTest1);
+  System.out.println("optTest1.get() = " + optTest1.get());
+}
+```
+
+<br>
+
+출력결과
+
+```plain
+s = abc
+optTest1 = Optional.empty
+
+java.util.NoSuchElementException: No value present
+...
+```
 
 <br>
 
@@ -313,29 +352,118 @@ Optional의 get() 메서드는  Optional<T>....get()을 수행할 때
 
 orElse() 메서드를 이용하면 Optional 이 값을 포함하지 않을 때 기본값을 제공할 수 있다.<br>
 
+```java
+@Test
+public void Optional_orElse확인해보기(){
+  String test = null;
+  Optional<String> optional = Optional.ofNullable(test);
+  System.out.println("현재 optional 값 = " + optional);
+  System.out.println("orElse로 값을 가져와보면 => " + optional.orElse("기본값입니다."));
+}
+```
+
+출력결과
+
+```plain
+현재 optional 값 = Optional.empty
+orElse로 값을 가져와보면 => 기본값입니다.
+```
+
+<br>
+
 ### orElseGet (Supplier <? Extends T > other)
 
-orElse() 메서드에 해당하는 게으른 버전의 메서드이다. (Optional 에 값이 없을 때만 Supplier 가 실행되기 때문이다.)
+orElse() 메서드의 게으른 버전의 메서드이다. (Optional 에 값이 없을 때만 Supplier 가 실행되기 때문이다.)
 
 - 디폴트 메서드를 만드는 데에 시간이 걸리거나 (효율성 때문에)
 - Optional 이 비어있을 때만 기본값을 생성하고 싶다면(기본값이 반드시 필요한 상황)
 
-이런 경우에는 orElseGet(Supplier<? extends T> other) 를 사용해야 한다.
+이런 경우에는 orElseGet(Supplier<? extends T> other) 를 사용해야 한다.<br>
+
+즉, Optional에 값이 없을 경우에 수행할 동작을 `Supplier <? Extends T > other` 에 람다식으로 정의해주면 된다. 그리고 이 Supplier 객체는  orElseGet 메서드 내에 전달해준다.<br>
+
+**테스트코드**<br>
+
+```java
+@Test
+public void Optional_orElsGet_확인해보기(){
+  String test = null;
+  Optional<String> optional = Optional.ofNullable(test);
+  System.out.println("현재 optional 값 = " + optional);
+  System.out.println("orElse로 값을 가져와보면 => " + optional.orElseGet(()->"기본값이에요"));
+}
+```
 
 <br>
 
-즉, Optional에 값이 없을 경우에 수행할 동작을 `Supplier <? Extends T > other` 에 람다식으로 정의해주면 된다. 그리고 이 Supplier 객체는  orElseGet 메서드 내에 전달해준다.
+**출력결과**<br>
+
+```plain
+현재 optional 값 = Optional.empty
+orElse로 값을 가져와보면 => 기본값이에요
+```
+
+<br>
 
 ### orElseThrow(Supplier < ? extends X> exceptionSupplier)
 
 Optional 이 비어있을 때에 예외를 발생시킨다는 점에서 get() 메서드와 비슷하다. 하지만 이 메서드는 발생시킬 예외의 종류를 선택하는 것이 가능하다.
 
-### fPresent(Consumer <? super T> consumer)
+**테스트코드**<br>
+
+```java
+@Test
+public void Optional_orElseThrow_테스트해보기(){
+  String test = null;
+  Optional<String> optional = Optional.ofNullable(test);
+  System.out.println("현재 optional 값 = " + optional);
+  optional.orElseThrow(()->{
+    throw new IllegalReceiveException("오우, 인자값을 잘못 주셨어요!!");
+  });
+}
+```
+
+<br>
+
+**출력결과**<br>
+
+```plain
+현재 optional 값 = Optional.empty
+
+com.sun.nio.sctp.IllegalReceiveException: 오우, 인자값을 잘못 주셨어요!!
+...
+```
+
+<br>
+
+### ifPresent(Consumer <? super T> consumer)
 
 - 값이 존재할 때 인수로 넘겨준 동작을 실행할 수 있다.
 - 값이 없으면 아무 일도 일어나지 않는다.
 
- 
+테스트 코드<br>
+
+```java
+@Test
+public void Optional_ifPresent_테스트해보기(){
+  String test1 = "ABC";
+  Optional<String> optional = Optional.ofNullable(test1);
+  optional.ifPresent((data)->System.out.println("data = " + data));
+
+  String test2 = null;
+  Optional.ofNullable(test2).ifPresent(data -> System.out.println("data = " + data));
+}
+```
+
+<br>
+
+**출력결과**<br>
+
+```plain
+data = ABC
+```
+
+<br>
 
 ### ifPresentOrElse() (java 9+)
 
@@ -348,11 +476,206 @@ ifPresentOrElse() 의 형태는 아래와 같다.
 
 <br>
 
+**테스트코드**<br>
+
+```java
+@Test
+public void Optional_ifPresentOrElse_테스트해보기(){
+  String test1 = "ABC";
+  Optional<String> optional1 = Optional.ofNullable(test1);
+  optional1.ifPresentOrElse(
+    (data)->System.out.println("data = " + data),
+    ()-> System.out.println("비어있다ㅏㅇ ㅋㅋ"));
+
+  String test2 = null;
+  Optional<String> optional2 = Optional.ofNullable(test2);
+  optional2.ifPresentOrElse(
+    (data)-> System.out.println("data = " + data),
+    ()-> System.out.println("비어있다ㅏㅇ ㅋㅋ"));
+}
+```
+
+<br>
+
+**출력결과**<br>
+
+```plain
+data = ABC
+비어있다ㅏㅇ ㅋㅋ
+```
+
+<br>
+
 ## 두 Optional 합치기
 
+> - findCheapestInsurance(Person, Car) 
+>   - Person, Car 타입의 인자들을 받아 새로운 결과인 Insurance 타입의 결과를 내는 메서드
+>   - Optional 을 사용하지 않을 경우의 메서드
+>   - 이 문서에서는 따로 정리하지 않을 예정
+> - nullSafeFindCheapestInsurance(Optional \<Person\>, Optional \<Car\> ) : Optional\<Insurance\>
+>   - Optional\<Person\>, Optional\<Car\> 를 인자로 받아서 새로운 Optional 객체인 Optional\<Insurance\> 를 리턴
 
+<br>
+
+```java
+class Person{
+  private String name;
+  private int age;
+  public Person(){}
+  public Person(String name, int age){
+    this.name = name;
+    this.age = age;
+  }
+}
+
+class Car{
+  private String name;
+  private int price;
+  public Car(){}
+  public Car(String name, int price){
+    this.name = name;
+    this.price = price;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getPrice() {
+    return price;
+  }
+}
+
+class Insurance{
+  private String name;
+  public Insurance(String name){
+    this.name = name;
+  }
+}
+
+public Insurance findCheapestInsurance(Person person, Car car){
+  return new Insurance(car.getName() + " 교보보험");
+}
+
+public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car){
+  if(person.isPresent() && car.isPresent()){
+    return Optional.of(findCheapestInsurance(person.get(), car.get()));
+  }
+  else{
+    return Optional.empty();
+  }
+}
+
+@Test
+@DisplayName("테스트__가장싼보험을_출력하기_null_아닌값을_넘겨줄경우")
+public void 테스트__가장싼보험을_출력하기_null_아닌값을_넘겨줄경우(){
+  Optional<Person> optPerson = Optional.ofNullable(new Person("지드래곤", 23));
+  Optional<Car> optCar = Optional.ofNullable(new Car("아우디", 2000));
+  Optional<Insurance> insurance = nullSafeFindCheapestInsurance(optPerson, optCar);
+  System.out.println(Optional.ofNullable(insurance));
+}
+
+@Test
+@DisplayName("테스트__가장싼보험을_출력하기_null_을_넘겨줄경우")
+public void 테스트__가장싼보험을_출력하기_null_을_넘겨줄경우(){
+  Optional<Person> optPerson = Optional.ofNullable(new Person("지드래곤", 23));
+  Optional<Car> optCar = Optional.ofNullable(null);
+  Optional<Insurance> insurance = nullSafeFindCheapestInsurance(optPerson, optCar);
+  System.out.println(Optional.ofNullable(insurance));
+}
+```
+
+<br>
 
 ### Optional 언랩하지 않고 두 Optional 합치기
+
+방금 전에 확인했던 위의 예제는 `person.get()` 또는 `car.get()` 을 이용해서 optional 내의 값을 get() 으로 얻어내는 방식, 즉 언랩하는 방식으로 새로운 객체인 Optional<Insurance> 인스턴스를 반환하는 메서드를 사용했었다.<br>
+
+Get() 메서드를 사용하지 않고, 본연의 옵셔늘 객체를 통해 새로운 객체를 만드는 메서드를 만들어보면 아래와 같다.
+
+```java
+public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car){
+  return person.flatMap( p -> car.map(c -> findCheapestInsurance(p, c)) );
+}
+```
+
+<br>
+
+**테스트코드**<br>
+
+```java
+class Person{
+  private String name;
+  private int age;
+  public Person(){}
+  public Person(String name, int age){
+    this.name = name;
+    this.age = age;
+  }
+}
+
+class Car{
+  private String name;
+  private int price;
+  public Car(){}
+  public Car(String name, int price){
+    this.name = name;
+    this.price = price;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getPrice() {
+    return price;
+  }
+}
+
+class Insurance{
+  private String name;
+  public Insurance(String name){
+    this.name = name;
+  }
+}
+
+public Insurance findCheapestInsurance(Person person, Car car){
+  return new Insurance(car.getName() + " 교보보험");
+}
+
+public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car){
+  if(person.isPresent() && car.isPresent()){
+    return Optional.of(findCheapestInsurance(person.get(), car.get()));
+  }
+  else{
+    return Optional.empty();
+  }
+}
+
+public Optional<Insurance> nullSafeFindCheapestInsurance2(Optional<Person> person, Optional<Car> car){
+		return person.flatMap( p -> car.map(c -> findCheapestInsurance(p, c)) );
+	}
+
+@Test
+@DisplayName("테스트__가장싼보험을_출력하기_null_아닌값을_넘겨줄경우2")
+public void 테스트__가장싼보험을_출력하기_null_아닌값을_넘겨줄경우2(){
+  Optional<Person> optPerson = Optional.ofNullable(new Person("지드래곤", 23));
+  Optional<Car> optCar = Optional.ofNullable(new Car("아우디", 2000));
+  Optional<Insurance> insurance = nullSafeFindCheapestInsurance2(optPerson, optCar);
+  System.out.println(Optional.ofNullable(insurance));
+}
+
+@Test
+@DisplayName("테스트__가장싼보험을_출력하기_null_을_넘겨줄경우2")
+public void 테스트__가장싼보험을_출력하기_null_을_넘겨줄경우2(){
+  Optional<Person> optPerson = Optional.ofNullable(new Person("지드래곤", 23));
+  Optional<Car> optCar = Optional.ofNullable(null);
+  Optional<Insurance> insurance = nullSafeFindCheapestInsurance2(optPerson, optCar);
+  System.out.println(Optional.ofNullable(insurance));
+}
+```
+
+<br>
 
 ## 필터로 특정 값 거르기
 
