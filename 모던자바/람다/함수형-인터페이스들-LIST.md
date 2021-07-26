@@ -1,0 +1,47 @@
+# Java8 부터 추가된 함수형 인터페이스들
+
+그냥, 뭐가 있는지 정리해서 한눈에 보기 위한 용도로만 리스트업 해봤다.
+
+- 함수형 인터페이스 Predicate <T>
+  - 함수 디스크립터
+    - T -> boolean
+  - 기본형 특화 함수형 인터페이스
+    - IntPredicate, LongPredicate, DoublePredicate
+- 함수형 인터페이스 Consumer<T>
+  - 함수 디스크립터
+    - T -> void
+  - 기본형 특화 함수형 인터페이스
+    - IntConsumer, LongConsumer, DoubleConsumer
+- 함수형 인터페이스 Function<T, R>
+  - 함수 디스크립터
+    - T -> R
+  - 기본형 특화 함수형 인터페이스
+    - IntFunction<R>, IntToDoubleFunction, IntToLongFunction,  LongFunction<R>, LongToDoubleFunction, LongToIntFunction,  DoubleFunction<R>, DoubleToIntFunction, DoubleToLongFunction,  ToIntFunction<R>, ToDoubleFunction<T>,  ToLongFunction<T>
+- 함수형 인터페이스 Supplier<T>
+  - 함수 디스크립터
+    - () -> T
+  - 기본형 특화 함수형 인터페이스
+    - BooleanSupplier, IntSupplier, LongSupplier, DoubleSupplier
+- 함수형 인터페이스 UnaryOperator<T>
+  - 함수 디스크립터
+    - T -> T
+  - 기본형 특화 함수형 인터페이스
+    - IntUnaryOperator, LongUnaryOperator, DoubleUnaryOperator
+- 함수형 인터페이스 BinaryOperator<T>
+  - 함수 디스크립터
+    - (T, T) -> T
+  - 기본형 특화 함수형 인터페이스
+    - IntBinaryOperator, LongBinaryOperator, DoubleBinaryOperator
+- 함수형 인터페이스 BiPredicate<L, R>
+  - 함수 디스크립터
+    - (T, U) -> boolean
+- 함수형 인터페이스 BiConsumer<T, U>
+  - 함수 디스크립터
+    - (T, U) -> void
+  - 기본형 특화 함수형 인터페이스
+    - ObjIntConsumer<T>, ObjLongConsumer<T>, ObjDoubleConsumer<T>
+- 함수형 인터페이스 BiFunction<T, U, R>
+  - 함수 디스크립터
+    - (T, U) -> R
+  - 기본형 특화 함수형 인터페이스
+    - ToIntBiFunction<T, U>, ToLongBiFunction<T, U>, ToDoubleBiFunction<T, U>
