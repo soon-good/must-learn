@@ -8,7 +8,10 @@
 
 ## 참고자료
 
-- [RabbitMQ Best Practice](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html)
+- [RabbitMQ Best Practice - Part 1](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html)
+- [RabbitMQ Best Practice - Part 2 (Part 1 을 요약한 자료)](https://www.cloudamqp.com/blog/part2-rabbitmq-best-practice-for-high-performance.html)
+- [RabbitMQ with High Performance Erlang - RabbitMQ HiPE 사용 권고](https://www.cloudamqp.com/blog/rabbitmq-hipe.html)
+- [What is the message size limit in RabbitMQ?](https://www.cloudamqp.com/blog/what-is-the-message-size-limit-in-rabbitmq.html)
 - Bulk Publishing 에 대해 찾아본 자료들
   - [Publishing Messages - Reference Documentation](http://budjb.github.io/grails-rabbitmq-native/doc/manual/guide/publishing.html)
   - [Support RabbitMQ Batch Publish](https://gitmemory.com/issue/MassTransit/MassTransit/1332/727778266)
@@ -19,6 +22,14 @@
   - [https://stackoverflow.com/questions/14201140/local-message-queue-api-library-for-java](https://stackoverflow.com/questions/14201140/local-message-queue-api-library-for-java)
 
 <br>
+
+## 최대 메시지 사이즈, 최대 처리 메시지 갯수
+
+[참고](https://www.cloudamqp.com/blog/what-is-the-message-size-limit-in-rabbitmq.html)<br>
+
+RabbitMQ 3.7.0 에서 이론적인 메시지 사이즈의 한계치는 2GB 이다.(큐 사이즈가 아니라 메시지 사이즈.) RabbitMQ 3.7, 3.8 에서 가장 옵티멀하게 허용되는 최대 메시지 사이즈는 128 MB 이다.<br>
+
+RabbitMQ에서 최대로 처리 가능한 메시지 갯수는 이론적으로 5만건이다. 
 
 ## Keep your queue short (if possible)
 
@@ -40,13 +51,58 @@
 
 ## Use Quorum Queues
 
-RabbitMQ 3.8 부터는 Quorum Queue 라는 종류의 큐가 새롭게 추가되었다. 이 Quorum Queue 는 레플리케이션이 적용된 큐인데, 고가용성과 데이터 안정성을 제공해준다.
+RabbitMQ 3.8 부터는 `Quorum Queue` 라는 종류의 큐가 새롭게 추가되었다. `Quorum Queue` 는 레플리케이션이 적용된 큐인데, 고가용성과 데이터 안정성을 제공해준다.
 
 <br>
 
 ## Enable lazy queues to get predictable performance
 
-lazy queue는 지연 대기열이라고 파파고에서는 번역된다. 지연 대기열은 클러스터를 더 안정적으로 만들 수 있고, 메시지가 디스크에 자동으로 저장되기 때문에 RAM 사용량이 최소화되지만 처리량은 조금 늦어진다.<br>
+참고 : [RabbitMQ Best Practice - Part 1](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html) 내의 `Enable lazy queues to get predictable performance` <br>
 
-지연 대기열은 실시간 데이터를 보여주어야 하는 곳에서는 사용하지 않는다. 주식 시세 프로그램을 예로 들어보면, 시세를 실시간으로 단순 디스플레이하는 기능의 경우 소비자가 충분히 생산자의 속도를 따라갈 수 있다. 이런 경우는 지연 큐를 사용하지 않아도 된다. <br>하지만, 주식 시세 데이터를 저장하는 큐의 경우는 데이터를 한번에 몇만 건씩 모아서 저장하는 것이 효율적이고, DB에 데이터를 최대 1분 정도 늦게 저장한다고 해서 데이터의 시세를 보여주는 데에는 문제가 되지 않는다. 어차피 조회 페이지에서는 시세 데이터가 덮어쓰게 되기 때문이다.<br>
+지연 대기열(lazy queue)는 클러스터를 더 안정적으로 만들수 있는 방법이다. 지연 대기열을 사용하면 메시지가 자동으로 디스크에 저장된다. 따라서 RAM 사용량이 최소화 된다. 하지만, 디스크에 저장하는 것으로 인해 처리량은 조금 늦어진다.<br>
+
+단, 아래의 경우는 Lazy Queue 를 비활성화 한다.<br>
+
+- 고 가용성 (High Performance)이 필요하고, 메시지가 짧은 경우
+- `max-length` 를 설정한 경우
+
+<br>
+
+즉, 단발성 메시지가 굉장히 트래픽이 높게 생성되는 경우 Lazy Queue 를 사용하지 않는다. <br>
+
+**ex)**<br>
+
+지연 대기열은 실시간 데이터를 보여주어야 하는 곳에서는 사용하지 않는다. 주식 시세 프로그램을 예로 들어보면, 시세를 실시간으로 단순 디스플레이하는 기능의 경우 소비자가 충분히 생산자의 속도를 따라갈 수 있다. 이런 경우는 지연 큐를 사용하지 않아도 된다. <br>
+
+하지만, 주식 시세 데이터를 저장하는 큐의 경우는 데이터를 한번에 몇만 건씩 모아서 DB에 Bulk Insert 하는 방식이 더 효율적이고, DB에 데이터를 최대 1분 정도 늦게 저장한다고 해서 데이터의 시세를 보여주는 데에는 문제가 되지 않는다. 어차피 조회 페이지에서는 시세 데이터가 덮어쓰게 되기 때문이다.<br>
+
+<br>
+
+## TTL 또는 max-length 설정
+
+만약 손실되어도 되는 데이터이고, 단발성 메시지 데이터이면서, 트래픽이 비교적 높은 경우 TTL, max-length 를 설정해서 메시지의 유효기간을 설정해두는 것이 좋다.
+
+<br>
+
+## 큐 갯수 조절 (Number of queues)
+
+참고 : [RabbitMQ Best Practice - Part 1](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html) 내의 `Number of Queues` <br>
+
+RabbitMQ 에서 queue 는 `single-thread` 로 구성된어 있다. 큐 하나는 최대 5만 건의 메시지까지 처리가 가능하다. <br>
+
+따라서 여러개의 Queue 를 사용할 경우 가능한 한도 내에서는 멀티코어를 사용하는 것이 권장되는 편.<br>
+
+커넥션, 큐가 많을 경우에는 CPU, RAM 사용량을 줄이려면 busy polling 을 꺼두어야 한다.<br>
+
+<br>
+
+
+
+
+
+
+
+
+
+
 
