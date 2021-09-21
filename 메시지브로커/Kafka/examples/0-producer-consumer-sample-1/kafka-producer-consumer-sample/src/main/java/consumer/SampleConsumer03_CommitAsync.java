@@ -37,7 +37,7 @@ public class SampleConsumer03_CommitAsync {
 			for(ConsumerRecord<String, String> record : records){
 				logger.info("레코드 : {} ", record);
 			}
-			consumer.commitAsync();	// 소비가 완료된 것에 대해 카프카 브로커에 소비했음을 통보하는 commitSync() 메서드를 호출한다.
+			consumer.commitAsync();	// 소비가 완료된 것에 대해 카프카 브로커에 소비했음을 통보하는 commitAsync() 메서드를 호출한다.
 		}
 
 	}
