@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * example01 : 킷값 없이 토픽만 지정해서 데이터를 전달하는 예제
+ * example02 : 메시지 킷값을 가지는 프로듀서
  */
-public class SampleProducer01 {
+public class SampleProducer02 {
 	private final static Logger logger = LoggerFactory.getLogger(SampleProducer01.class);
 	private final static String TOPIC_NAME = "test";
 	private final static String BOOTSTRAP_SERVERS = "ec2-gosgjung-hotmail:9092";
@@ -23,8 +23,9 @@ public class SampleProducer01 {
 
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(config);
 
+		String msgKey = "샘플2-메시지";
 		String msgValue = "테스트 메시지";
-		ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, msgValue);
+		ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, msgKey ,msgValue);
 		producer.send(record);
 		logger.info("{}", record);
 
