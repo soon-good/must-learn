@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
@@ -41,6 +42,7 @@ public class SampleConsumer05_RebalanceListener {
 		consumer = new KafkaConsumer<String, String>(config);
 
 		consumer.subscribe(Arrays.asList(TOPIC_NAME), new RebalanceListener());
+		Set<TopicPartition> assignedPartition = consumer.assignment();
 
 		while(true){
 			ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
