@@ -1,3 +1,5 @@
+package producer;
+
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -8,14 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * example01 : 킷값 없이 토픽만 지정해서 데이터를 전달하는 예제
+ * 예제 5) 콜백을 이용해 데이터 전송 성공 여부를 리턴받기
  */
-public class SampleProducer01 {
+public class SampleProducer05 {
 	private final static Logger logger = LoggerFactory.getLogger(SampleProducer01.class);
 	private final static String TOPIC_NAME = "test";
 	private final static String BOOTSTRAP_SERVERS = "ec2-gosgjung-hotmail:9092";
 
-	public static void main(String [] args){
+	public static void main(String [] args) {
 		Properties config = new Properties();
 		config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -23,10 +25,18 @@ public class SampleProducer01 {
 
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(config);
 
+		String msgKey = "샘플5-메시지";
 		String msgValue = "테스트 메시지";
-		ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, msgValue);
-		producer.send(record);
-		logger.info("{}", record);
+
+		ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, msgKey, msgValue);
+		producer.send(record, new ProducerCallback());
+
+		// try {
+		// 	RecordMetadata recordMetadata = producer.send(record).get();
+		// 	logger.info("{}", recordMetadata.toString());
+		// } catch (InterruptedException | ExecutionException e) {
+		// 	e.printStackTrace();
+		// }
 
 		producer.flush();
 		producer.close();
