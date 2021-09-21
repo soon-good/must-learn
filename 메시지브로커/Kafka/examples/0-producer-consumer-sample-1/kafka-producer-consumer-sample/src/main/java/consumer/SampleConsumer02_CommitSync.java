@@ -24,7 +24,7 @@ public class SampleConsumer02_CommitSync {
 		config.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 		config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-		config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);	// 비동기 커밋 옵션을 OFF 했다.
+		config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);	// 자동(비명시) 커밋 옵션을 OFF 했다.
 
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(config);
 		consumer.subscribe(Arrays.asList(TOPIC_NAME));
