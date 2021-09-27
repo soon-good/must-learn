@@ -161,7 +161,7 @@ $ sudo update-alternatives --config java
 ```bash
 $ vim ~/.bash_profile
 
-JAVA_HOME=/home/ec2-user/java/current
+JAVA_HOME=/home/ec2-user/env/java/current
 JRE_HOME=$JAVA_HOME/jre
 CLASS_PATH=$JAVA_HOME/lib/tools.jar
 
@@ -209,11 +209,8 @@ OpenJDK 64-Bit Server VM AdoptOpenJDK-16.0.1+9 (build 16.0.1+9, mixed mode, shar
 
 ## ASDF ㅁㄴㅇㄹ
 
-서버의 JDK 를 바꾸는 일은 흔하지 않다. 하지만 개발 용도 VM을 관리하는 상황이라면 JDK를 자주 바꿀일이 많다. 예를 들면, ElasticSearch를 사용하는 경우 Java 버전에 따라서 거지같은 에러를 자주 접해서ㅋㅋ Java 버전을 여러번 바꿔가며 설치하는 경우가 있다.(=1년 반 전 쯤에 경험했던 것 같다.). 이렇게 초기 개발 단계 VM에서 JDK를 여러번 바꿔가면서 확인해야 할 경우 이렇게 alias와 심볼릭 링크를 만들어 둔다면, 좋은 선택이 되는 것 같다.<br>
+프로덕션 서버의 JDK 를 바꾸는 일은 흔하지 않다. 하지만 개발 용도 VM을 관리하는 상황이라면 JDK를 자주 바꿀일이 많다. 예를 들면, ElasticSearch를 사용하는 경우 Java 버전에 따라서 거지같은 에러를 자주 접해서ㅋㅋ Java 버전을 여러번 바꿔가며 설치하는 경우가 있다. 이렇게 초기 개발 단계 VM에서 JDK를 여러번 바꿔가면서 확인해야 할 경우 이렇게 alias와 심볼릭 링크를 만들어 둔다면, 좋은 선택이 되는 것 같다.<br>
 
 <br>
-
-
-
 
 
