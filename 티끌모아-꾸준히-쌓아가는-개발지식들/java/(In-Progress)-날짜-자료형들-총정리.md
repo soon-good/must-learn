@@ -73,3 +73,113 @@ Datatype module to make Jackson recognize Java 8 Date & Time API data types (JSR
 
 
 
+## 다른 국가의 해당국가의 타임존으로 UTC 현재 시간 구하기
+
+예를 들면 미국의 현지 시간을 UTC 로 구하고 싶다고 해보자. 미국의 경우 UTC로 시간을 표시할 때 `-4:00` 이라는 표현식이 붙는다. UTC와 비교했을 때 4 시간 늦는다는 의미인 것 같다. 영국까지 4시간 걸리는 것인가 하는 생각이 들었었다.<br>
+
+> 참고)  직접 구글에서 **미국 UTC 시간** 이라는 검색어로 검색하면 아래와 같은 결과가 나타난다. 자세한 내용은 [여기](https://time.is/ko/United_States) 를 참고하자<br>
+>
+> ![이미지](./img/UTC-1.png)
+
+<br>
+
+사실 OffsetDateTime, ZonedDateTime 이런 것들은 세계 표준 시간 표현에 관련된 ISO 관련 표준에 따라 JAVA 라이브러리 개발자들이 고맙게도 만들어준 라이브러리다. 다른 Javascript, C# 과 같은 언어에서도 아마도... 지원하는 기능일 것으로 보인다. Java 여서 가능한 API라는 자바우월적인 사고방식을 나도 모르게 탈피하려고 한번 적어봤다.<br>
+
+이 외에도 "Europe/Berlin" 과 같은 지역 표기법 역시 있는데, 이것도 이것 저것 자료를 조사하다보니 세계 표준으로 부르는 용어가 있는걸로 보였는데, 기억이 안난다. 찾게되면 여기에 정리해야 할 것 같다.<br>
+
+<br>
+
+### ZoneId 의 개념
+
+만약 원하는 도시의 ZoneOffset 을 구하려면 아래와 같이 구한다.
+
+```java
+ZoneId zone = ZoneId.of("Europe/Berlin");
+```
+
+그리고 이 ZoneId를 이용하면 ZonedDateTime.now() 내에 ZoneId를 전달해서 ZoneDateTime 기반의 해당 Zone의 현지시각을 구할 수 있다. 예를 들면 아래와 같은 방식이다.
+
+```java
+ZoneId zone = ZoneId.of("Europe/Berlin");
+ZonedDateTime date = ZonedDateTime.now(zone);
+```
+
+<br>
+
+### ZoneOffset 의 개념
+
+ZoneOffset은 UTC 기반으로 시간의 시차(Offset)을 나타내는 자바에서 제공하는 클래스다.<br>
+
+만약 서버가 한국에 있을때 UTC 시간을 구하게 된다면 `+9:00` 라는 오프셋이 나타난다. <br>
+
+만약 서버가 미국에 있을때 UTC 시간을 구하게 된다면 `-4:00` 이라는 오프셋이 나타난다.<br>
+
+ZoneOffset 을 구하는 방법은 두가지가 있다.
+
+- 시차를 직접 입력해서 구하는 방법
+- ZoneId로 특정 도시를 찾아서 Offset을 구하는 방법
+
+<br>
+
+#### 시차를 직접 입력해서 UTC 시간 구하기
+
+```java
+@Test
+@DisplayName("시차를_직접_입력해서_UTC_시간을_구하기")
+void 시차를_직접_입력해서_UTC_시간을_구하기(){
+  ZoneOffset zoneOffSet= ZoneOffset.of("+02:00");
+  OffsetDateTime date = OffsetDateTime.now(zoneOffSet);
+  System.out.println(date);
+}
+```
+
+<br>
+
+출력결과
+
+```plain
+2021-09-27T15:31:29.372066+02:00
+```
+
+<br>
+
+#### ZoneId 로 특정 도시를 찾아서 Offset을 구하는 방법
+
+```java
+ZoneOffset zoneOffset = ZoneId.of("America/New_York").getRules().getOffset(Instant.now());
+```
+
+<br>
+
+출력결과
+
+```plain
+2021-09-27T16:32:48.049584+03:00
+```
+
+<br>
+
+### LocalDate, LocalTime 을 이용해서 미국 현지의 UTC 시간 구하기
+
+아래는 미국의 현지시각을 미국 기준의 UTC 시간으로 구하는 예제다.
+
+```java
+@Test
+void 현재시간_현재날짜에_맞는_미국현지의_UTC_현재시간_구하기(){
+  LocalDate localDate = LocalDate.now();
+  LocalTime localTime = LocalTime.now();
+
+  ZoneOffset zoneOffset = ZoneId.of("America/New_York").getRules().getOffset(Instant.now());
+  OffsetDateTime offsetDt = OffsetDateTime.of(localDate, localTime, zoneOffset);
+  System.out.println("offsetDt = " + offsetDt);
+}
+```
+
+<br>
+
+LocalTime, LocalDate는 시차에 상관없이 날짜 또는 시간자체를 표현하는 시간표현법이다. 따라서 OffsetDateTime, ZonedDateTime과 결합해서 사용하는 것이 가능하다. 즉, 단순 시간단위를 결합해서 시차가 적용된 시간으로 변환할 때 ZonedDateTime, OffsetDateTime 을 사용가능하다.<br>
+
+오늘은 여기까지만 일단 써야 겠다. 단순히 사용법만 정리하는건 쉽겠다고 생각했는데, 뭔가 어떤 식으로 글을 전개해나갈지 까지 고려하면서 쓰다보니 몇줄 안되지만 30분이나 걸려버렸다. 프로젝트. 기간이라 30분 이상은 글을 쓰지 못한다. 그래도 내일도 30분 정도 투자해서 정리할 예정이다. 정리하다보니 느꼈다. 어느 정도의 루틴을 갖고 강제성을 갖고 정리를 하게 되면 꾸준히 하게 된다. 머릿속에 기억하는 것보다는 정리를 하다보면 나중에 다시 학습할수도 있고 반복학습이 되기에 강박적인 학습이 아닌, 자연스러운 반복학습으로 이어지는 것 같다.<br>
+
+
+
