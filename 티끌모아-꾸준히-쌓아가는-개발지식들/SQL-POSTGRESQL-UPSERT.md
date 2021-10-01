@@ -128,7 +128,7 @@ DO
    UPDATE SET email = EXCLUDED.email || ';' || customers.email;
 ```
 
-변경된 결과를 살펴보면 아래와 같다. 기존 데이터인 새로운 데이터인  [hotline@microsoft.com](hotline@microsoft.com) 뒤에 문자열 `;` 을 붙이고 기존 데이터인 contact@microsoft.com 을 덧붙여서 저장했다.<br>
+변경된 결과를 살펴보면 아래와 같다. 새로운 데이터인  [hotline@microsoft.com](hotline@microsoft.com) 뒤에 문자열 `;` 을 붙이고 기존 데이터인 contact@microsoft.com 을 덧붙여서 저장했다.<br>
 
 ![이미지](./img/SQL-POSTGRES-UPSERT-2.png)
 
