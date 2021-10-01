@@ -118,7 +118,7 @@ ON CONFLICT (name)
 DO NOTHING;
 ```
 
-이번에는 이미 email이 [contact@microsoft.com](mailto:contact@microsoft.com) 인 데이터가 있더라도, 이것이 존재한다면 [hotline@microsoft.com](mailto:hotline@microsoft.com) 으로 수정하려는 경우 아래와 같이 SQL을 작성 가능하다.<br>
+이번에는 이미 email이 [contact@microsoft.com](mailto:contact@microsoft.com) 인 데이터가 있더라도, 이것이 존재한다면 새로운 데이터인  [hotline@microsoft.com](hotline@microsoft.com) 뒤에 문자열 `;` 을 붙이고 기존 데이터인 contact@microsoft.com 을 덧붙여서 저장하려는 경우 아래와 같이 SQL 을 작성가능하다.<br>
 
 ```sql
 INSERT INTO customers (name, email)
@@ -128,8 +128,9 @@ DO
    UPDATE SET email = EXCLUDED.email || ';' || customers.email;
 ```
 
-변경된 결과를 살펴보면 아래와 같다.
+변경된 결과를 살펴보면 아래와 같다. 기존 데이터인 새로운 데이터인  [hotline@microsoft.com](hotline@microsoft.com) 뒤에 문자열 `;` 을 붙이고 기존 데이터인 contact@microsoft.com 을 덧붙여서 저장했다.<br>
 
 ![이미지](./img/SQL-POSTGRES-UPSERT-2.png)
 
 <br>
+
