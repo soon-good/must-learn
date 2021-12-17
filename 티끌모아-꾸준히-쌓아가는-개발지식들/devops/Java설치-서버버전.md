@@ -35,12 +35,12 @@ $ tar xvzf OpenJDK16U-jdk_x64_linux_hotspot_16.0.1_9.tar.gz
 $ tar xvzf OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz
 
 $ mv jdk-16.0.1+9 jdk16
-$ mv jdk-16.0.1+9-jre jre
+$ mv jdk-16.0.1+9-jre jre16
 
 # jdk16 디렉터리를 ~/env/java/java16 로 변경
 $ mv jdk16 ~/env/java/java16
 # jre 디렉터리를 ~/env/java/java16/jre 로 이동
-$ mv jre16 ~/env/java/java16/jre
+$ mv jre ~/env/java/java16/jre
 
 # 옮겨놓은 디렉터리로 이동
 $ cd ~/env/java/java16
@@ -55,7 +55,7 @@ $ cd ~/env/java/java16
 ```bash
 $ vim ~/.bash_profile
 JAVA_HOME=/home/ec2-user/env/java/java16
-JRE_HOME=/home/ec2-user/env/java/java16/jre16
+JRE_HOME=/home/ec2-user/env/java/java16/jre
 CLASSPATH=/home/ec2-user/env/java/java16/lib/tools.jar
 
 PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$CLASSPATH:$HOME/.local/bin:$HOME/bin
@@ -212,5 +212,4 @@ OpenJDK 64-Bit Server VM AdoptOpenJDK-16.0.1+9 (build 16.0.1+9, mixed mode, shar
 프로덕션 서버의 JDK 를 바꾸는 일은 흔하지 않다. 하지만 개발 용도 VM을 관리하는 상황이라면 JDK를 자주 바꿀일이 많다. 예를 들면, ElasticSearch를 사용하는 경우 Java 버전에 따라서 거지같은 에러를 자주 접해서ㅋㅋ Java 버전을 여러번 바꿔가며 설치하는 경우가 있다. 이렇게 초기 개발 단계 VM에서 JDK를 여러번 바꿔가면서 확인해야 할 경우 이렇게 alias와 심볼릭 링크를 만들어 둔다면, 좋은 선택이 되는 것 같다.<br>
 
 <br>
-
 
